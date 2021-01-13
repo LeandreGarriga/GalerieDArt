@@ -1,4 +1,10 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package galerie.entity;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.*;
@@ -9,32 +15,24 @@ import lombok.*;
 // cf. https://examples.javacodegeeks.com/spring-boot-with-lombok/
 @Getter @Setter @NoArgsConstructor @RequiredArgsConstructor @ToString
 @Entity // Une entité JPA
-public class Galerie {
+public class Transaction {
     @Id  @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Integer id;
-
-    @Column(unique=true)
-    @NonNull
-    private String nom;
     
     @Column(unique=true)
     @NonNull
-    private String adresse;
+    private LocalDate venduLe;
     
-    @OneToMany
-    List<Exposition> evenements = new LinkedList<>();
+    @Column(unique=true)
+    @NonNull
+    private float prixVente;
     
-    // TODO : Mettre en oeuvre la relation oneToMany vers Exposition
-    public float CAAnnuel(int annee){
-        float caa = 0;
-        for(Exposition e : evenements){
-            if(e.getDateDebut().getYear()== annee){
-                caa= caa + e.getCa();
-            }
-            
-        }
-        
-        return caa;
-    }
+    @OneToMany(mappedBy = "achats")
+    List<Personne> client = new LinkedList<>();
+    
+    @OneToMany(mappedBy = "ventes")
+    List<Exposition> lieuDeVente = new LinkedList<>();
+    
+    @OneToOne
+    private Tableau oeuvre;
 }
-

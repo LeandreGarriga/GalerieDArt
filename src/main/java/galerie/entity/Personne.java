@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package galerie.entity;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,10 +14,10 @@ import lombok.*;
 // cf. https://examples.javacodegeeks.com/spring-boot-with-lombok/
 @Getter @Setter @NoArgsConstructor @RequiredArgsConstructor @ToString
 @Entity // Une entité JPA
-public class Galerie {
+public class Personne {
     @Id  @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Integer id;
-
+    
     @Column(unique=true)
     @NonNull
     private String nom;
@@ -21,20 +26,24 @@ public class Galerie {
     @NonNull
     private String adresse;
     
-    @OneToMany
-    List<Exposition> evenements = new LinkedList<>();
+    public Personne(Integer id, String nom, String adresse) {
+        this.id = id;
+        this.nom = nom;
+        this.adresse = adresse;
+    }
     
-    // TODO : Mettre en oeuvre la relation oneToMany vers Exposition
-    public float CAAnnuel(int annee){
-        float caa = 0;
-        for(Exposition e : evenements){
-            if(e.getDateDebut().getYear()== annee){
-                caa= caa + e.getCa();
+    @OneToMany
+    List<Transaction> achats  = new LinkedList<>();
+    
+    public float BudgetArt(int annee){
+        float budg = 0;
+        for(Transaction tra : achats){
+            if((tra.getVenduLe().getYear())== annee){
+                budg= budg+ tra.getPrixVente();
             }
             
         }
         
-        return caa;
-    }
+        return budg;
 }
-
+}
